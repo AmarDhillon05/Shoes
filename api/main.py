@@ -38,3 +38,5 @@ def send_shoe_data():
     except Exception as e:
         return "Internal error"
     
+    
+app.run(host = '0.0.0.0')
