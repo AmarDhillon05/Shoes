@@ -2,6 +2,7 @@ from flask import Flask
 from scrape_and_process.price_predict import predict_price_over_time
 from apscheduler.schedulers.background import BackgroundScheduler
 import pandas as pd
+import os
 
 scheduler = BackgroundScheduler()
 csv_path = "shoe_data.csv"
@@ -39,4 +40,4 @@ def send_shoe_data():
     
 
 if __name__ == "__main__":
-    app.run(host = '0.0.0.0')
+    app.run(host = os.environ['PORT'])
