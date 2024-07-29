@@ -38,6 +38,3 @@ def send_shoe_data():
     except Exception as e:
         return "Internal error"
     
-
-if __name__ == "__main__":
-    app.run(host = '0.0.0.0', port = os.environ['PORT'])
