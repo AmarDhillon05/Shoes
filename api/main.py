@@ -40,4 +40,4 @@ def send_shoe_data():
     
 
 if __name__ == "__main__":
-    app.run(host = os.environ['PORT'])
+    app.run(host = '0.0.0.0', port = os.environ['PORT'])
