@@ -21,8 +21,6 @@ def run_csv_updater():
     )
     scheduler.start()
 
-update_csv()
-run_csv_updater()
 
 
 #flask app
@@ -38,5 +36,6 @@ def send_shoe_data():
     except Exception as e:
         return "Internal error"
     
-    
-app.run(host = '0.0.0.0')
+
+update_csv()
+run_csv_updater()
