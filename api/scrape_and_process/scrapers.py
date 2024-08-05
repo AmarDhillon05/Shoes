@@ -150,5 +150,3 @@ def get_adidas_drops():
 
     return adidas_data
 
-
-print(get_new_balance_drops())
