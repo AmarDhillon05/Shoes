@@ -39,4 +39,3 @@ def send_shoe_data():
 
 update_csv()
 run_csv_updater()
-app.run(port = 8000)
