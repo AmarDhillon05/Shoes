@@ -1,7 +1,7 @@
 const express = require("express")
 const axios = require("axios")
 
-const api_link = "https://shoe-price-api.onrender.com/data"
+const api_link = "http://127.0.0.1:8000/data"
 
 const app = express()
 app.set("view engine", "ejs")
