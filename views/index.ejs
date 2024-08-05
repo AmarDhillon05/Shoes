@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<head>
+    <title>Shoe Prices</title>
+    <link href="/css/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <p id = "data" style = "display: none"><%= data %></p>
+    <div id = "titlebox">
+        <h1 id = "title" style = "display: inline;">Upcoming Sneakers</h1>
+        <img id = "page_logo" src = "https://img.freepik.com/premium-vector/pair-red-sneakers-shoes-with-black-white-accents-isolated-white-background_480900-555.jpg">
+    </div>
+
+    <br><br><br>
+    <img class = "brand_img" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlAHSjq7Gk3-FboSL_OMkC42bdCkxD12e4mw&s">
+    <div id = "Nike" class = "brand_div"></div>
+    <img class = "brand_img" src = "https://i.pinimg.com/736x/cf/9f/87/cf9f8781ed02f70b72b64cec0960a4ca.jpg">
+    <div id = "Jordan" class = "brand_div"></div>
+    <img class = "brand_img" src = "https://static.vecteezy.com/system/resources/previews/010/994/325/original/adidas-logo-white-symbol-clothes-design-icon-abstract-football-illustration-with-black-background-free-vector.jpg">
+    <div id = "adidas" class = "brand_div"></div>
+    <img class = "brand_img" src = "https://northumbriasport.com/uploads/articles/21fngmJlpSfrnVtYIEa_THUMB_5fd13be70c1ac-nb-news-article_5fd13be70c08d.png">
+    <div id = "new balance" class = "brand_div"></div>
+
+</body>
+<script>
+    const data = JSON.parse(document.getElementById("data").innerHTML)
+    if("Error" in Object.keys(data)){
+        document.h1.innerHTML = data.Error;
+    }
+    else{
+        const n_shoes = Object.keys(data.brand).length
+        var idx = 0;
+        while(idx < n_shoes){
+
+            let shoe_div = document.createElement("div")
+            shoe_div.classList.add("shoe_div")
+            let img = document.createElement("img")
+            img.classList.add("shoe_img")
+            img.src = data.img_link[idx]
+            shoe_div.appendChild(img)
+
+            let title = document.createElement("h3")
+            title.appendChild(document.createTextNode(data.name[idx]))
+            shoe_div.appendChild(title)
+
+            let date = data.release_date[idx]
+            let brand = data.brand[idx]
+            if(brand == "Nike" || brand == "Jordan"){
+                date = date.split(" ")[1]
+            }
+
+            let info_strings = [
+                `Drops ${date} for $${data.price[idx]}`,
+                `Expected to resell for $${Math.round(data.predicted_prices[idx])} ($${Math.round(data.predicted_profit[idx])} profit)`,
+            ]
+            info_strings.forEach(element => {
+                let info = document.createElement("p")
+                info.appendChild(document.createTextNode(element))
+                shoe_div.append(info)
+            });
+            
+            let link = document.createElement("a")
+            link.appendChild(document.createTextNode("See Shoe"))
+            link.href = data.link[idx]
+            shoe_div.append(link)
+
+            document.getElementById(brand).appendChild(shoe_div)
+
+            idx ++
+        }
+    }
+</script>

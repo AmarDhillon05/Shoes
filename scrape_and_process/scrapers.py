@@ -8,6 +8,15 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 
+#Same for all since all websites have blockers that make it annoying to extract images
+def get_img_from_google(query):
+    link = f'https://www.google.com/search?q={query.lower().replace(" ", "+")}&tbm=isch'
+    req = requests.get(link)
+    parser = BeautifulSoup(req.content, 'html.parser')
+    img_links = [i['src'] for i in parser.findAll("img") if "gif" not in i['src']]
+    return img_links[0]
+    
+
 #Getting data for nike/jordan drops via snkrs
 def get_nike_drops():
     snkrs_link = "https://nike.com/launch?s=upcoming"
@@ -28,17 +37,16 @@ def get_nike_drops():
             colorway = parser.find('h2', {'class' : 'headline-1'}).decode_contents()
             price = parser.find('div', {'class' : 'headline-5'}).decode_contents()
             release_date = parser.find('div', {'class' : 'available-date-component'}).decode_contents()
+            
 
             price = float(price.replace("$", ""))
-            release_datedate = release_date.split(' ')[1]
-
             brand = 'Nike'
             if 'Jordan' in shoe:
                 brand = 'Jordan'
 
             snkrs_data.append({
                 'name' : shoe + " " + colorway, 'price' : price, 'release_date' : release_date, 'link' : full_link,
-                'brand' : brand
+                'brand' : brand, 'img_link' : get_img_from_google(shoe + " " + colorway)
             })
         except:
             pass #Assume the product found isn't a sneaker
@@ -87,8 +95,9 @@ def get_new_balance_drops():
             price = driver.find_element(By.CSS_SELECTOR, 'span.sales.font-body-large').get_property('innerHTML')
             release_date = driver.find_element(By.CSS_SELECTOR, 'span.date').get_property('innerHTML')
             nb_data.append({
-                'name' : "New Balance " + name, 'price' : price, 'release_date' : release_date, 'link' : link, 'brand' : 'new balance'
-            })
+                'name' : "New Balance " + name, 'price' : price, 'release_date' : release_date, 'link' : link, 
+                'brand' : 'new balance',  'img_link' : get_img_from_google("New Balance " + name)
+            }) #Image link is placeholder due to site being down
             driver.quit()
         except: #Assume the link isn't for a shoe
             pass 
@@ -123,7 +132,6 @@ def get_adidas_drops():
     shoe_names = [i.get_property('innerHTML') for i in driver.find_elements(By.CSS_SELECTOR, 'div._plc-product-name_1xwgu_161')]
     prices = [i.get_property('innerHTML') for i in driver.find_elements(By.CSS_SELECTOR, 'div.gl-price-item')]
     links = [i.get_property('href') for i in driver.find_elements(By.CSS_SELECTOR, 'a._plc-product-link_1xwgu_57')]
-
     driver.quit()
 
     adidas_data = []
@@ -133,7 +141,8 @@ def get_adidas_drops():
             date = date.split(" ")[1] + " " + date.split(" ")[2]
 
             adidas_data.append({
-                'release_date' : date, 'name' : "Adidas " + shoe_name, 'price' : price, 'link' : link, 'brand' : 'adidas'
+                'release_date' : date, 'name' : "Adidas " + shoe_name, 'price' : price, 'link' : link, 
+                'brand' : 'adidas',  'img_link' : get_img_from_google("Adidas " + shoe_name)
             })
         
         except: #Same assumption that product isn't a shoe
@@ -142,4 +151,4 @@ def get_adidas_drops():
     return adidas_data
 
 
-
+print(get_new_balance_drops())

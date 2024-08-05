@@ -45,7 +45,7 @@ def predict_lowest_ask(shoe_dict, days_since_release):
 def get_sorted_drops():
     all_shoes = scrapers.get_adidas_drops() + scrapers.get_new_balance_drops() + scrapers.get_nike_drops()
     os.system("cls")
-    all_shoes = pd.DataFrame(all_shoes)
+    all_shoes = pd.DataFrame(all_shoes).drop_duplicates()
     predicted_prices = []
     idx_to_remove = []
     for idx, row in all_shoes.iterrows():
@@ -61,7 +61,7 @@ def get_sorted_drops():
     
 
 #Predicting how the price will change in a week, two weeks, and a month and saving data to csv to be used by api
-
+#These values aren't being used right now since resale data isn't scrapable and predictions on future drops are bad
 def predict_price_over_time(save_to_csv = False, path = "shoe_data.csv"):
     all_shoes = get_sorted_drops()
     after_week, after_2_weeks, after_month = [], [], []
