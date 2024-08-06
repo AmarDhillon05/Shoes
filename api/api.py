@@ -16,7 +16,7 @@ def update_csv():
 
 #Printer for every minute to not have inactivity
 def printer():
-    print("Session active on "  + datetime.now()
+    print("Session active on "  + datetime.now())
 
 
 def run_csv_updater():
