@@ -16,7 +16,6 @@ axios.get(api_link).then(res => {
 
 app.get('/', (req, res) => {
     axios.get(api_link).then(api_res => {
-        console.log(api_res.data)
         res.render("index", {data : JSON.stringify(api_res.data)})
     }).catch(err => {
         res.render("index", {data : {"Error" : err}})
