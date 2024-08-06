@@ -14,9 +14,6 @@ def update_csv():
     print("CSV updated")
 
 
-#Printer for every minute to not have inactivity
-def printer():
-    print("Session active")
 
 
 def run_csv_updater():
@@ -24,13 +21,7 @@ def run_csv_updater():
         update_csv,
         'interval',
         days = 1
-    )
-
-    scheduler.add_job(
-        printer,
-        'interval',
-        minutes = 5
-    )    
+    )   
     scheduler.start()
 
 
