@@ -3,6 +3,7 @@ from scrape_and_process.price_predict import predict_price_over_time
 from apscheduler.schedulers.background import BackgroundScheduler
 import pandas as pd
 import os
+from datetime import datetime
 
 scheduler = BackgroundScheduler()
 csv_path = "shoe_data.csv"
@@ -13,14 +14,24 @@ def update_csv():
     print("CSV updated")
 
 
+#Printer for every minute to not have inactivity
+def printer():
+    print("Session active on "  + datetime.now()
+
+
 def run_csv_updater():
     scheduler.add_job(
         update_csv,
         'interval',
         days = 1
     )
-    scheduler.start()
 
+    scheduler.add_job(
+        printer,
+        'interval',
+        seconds = 1
+    )    
+    scheduler.start()
 
 
 #flask app
