@@ -3,6 +3,7 @@ const axios = require("axios")
 const cron = require("node-cron")
 
 const api_link = "https://shoe-price-api.onrender.com/data"
+const app_link = "https://shoe-price-app.onrender.com" //For refreshing the server
 
 const app = express()
 app.set("view engine", "ejs")
@@ -21,6 +22,12 @@ app.get('/', (req, res) => {
         res.render("index", {data : {"Error" : err}})
     })
 })
+
+cron.schedule('* */5 * * *', () => {
+    axios.get(app_link).then(res => {
+        console.log("Pinged server")
+    })
+});
 
 
 app.listen(5000, () => {
