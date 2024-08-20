@@ -44,6 +44,8 @@ def predict_lowest_ask(shoe_dict, days_since_release):
 
 def get_sorted_drops():
     all_shoes = scrapers.get_adidas_drops() + scrapers.get_new_balance_drops() + scrapers.get_nike_drops()
+    if all_shoes == []:
+        return all_shoes
     os.system("cls")
     all_shoes = pd.DataFrame(all_shoes).drop_duplicates()
     predicted_prices = []
@@ -64,22 +66,24 @@ def get_sorted_drops():
 #These values aren't being used right now since resale data isn't scrapable and predictions on future drops are bad
 def predict_price_over_time(save_to_csv = False, path = "shoe_data.csv"):
     all_shoes = get_sorted_drops()
-    after_week, after_2_weeks, after_month = [], [], []
-    for idx, row in all_shoes.iterrows():
-        row_dict = row.to_dict()
-        after_week.append(predict_lowest_ask(row_dict, 700))
-        after_2_weeks.append(predict_lowest_ask(row_dict, 1400))
-        after_month.append(predict_lowest_ask(row_dict, 3000))
-
-    all_shoes['price_after_week'] = after_week
-    all_shoes['price_after_two_weeks'] = after_2_weeks
-    all_shoes['price_after_month'] = after_month
-
-    if save_to_csv:
-        if os.path.exists(path):
-            os.remove(path)
-        all_shoes.to_csv(path)
-    else:
-        return all_shoes
+    if all_shoes != []: #In case there was a scraping error, we don't want to update the csv
+        after_week, after_2_weeks, after_month = [], [], []
+        for idx, row in all_shoes.iterrows():
+            row_dict = row.to_dict()
+            after_week.append(predict_lowest_ask(row_dict, 700))
+            after_2_weeks.append(predict_lowest_ask(row_dict, 1400))
+            after_month.append(predict_lowest_ask(row_dict, 3000))
     
+        all_shoes['price_after_week'] = after_week
+        all_shoes['price_after_two_weeks'] = after_2_weeks
+        all_shoes['price_after_month'] = after_month
+    
+        if save_to_csv:
+            if os.path.exists(path):
+                os.remove(path)
+            all_shoes.to_csv(path)
+        else:
+            return all_shoes
+            return all_shoes
+        
 
