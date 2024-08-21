@@ -66,10 +66,15 @@ def get_sorted_drops():
 #These values aren't being used right now since resale data isn't scrapable and predictions on future drops are bad
 def predict_price_over_time(save_to_csv = False, path = "shoe_data.csv"):
     all_shoes = get_sorted_drops()
-    if all_shoes == []:
-        return all_shoes
+    empty = True
+    try:
+        empty = all_shoes.empty #Will Throw error if the list is thrown in case there was an error or there aren't any shoes
+    except Exception as e:
+        pass
     
-    else: #In case there was a scraping error, we don't want to update the csv
+    if empty:
+        return []
+    else: 
         after_week, after_2_weeks, after_month = [], [], []
         for idx, row in all_shoes.iterrows():
             row_dict = row.to_dict()
