@@ -6,6 +6,6 @@ Made using a variety of cross-validated regressor models for prediction, seleniu
 
 Site link: https://shoe-price-app.onrender.com
 
-API link (Daily updated JSON of scraped data and predictions on prices): https://shoe-price-api.onrender.com/data
+API link (Daily updated JSON of scraped data and predictions on prices): https://shoe-price.onrender.com/data
 
 Dataset link used to train the model: https://www.kaggle.com/datasets/ajiaron/stockx-sneaker-data
