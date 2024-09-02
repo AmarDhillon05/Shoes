@@ -4,8 +4,7 @@ This is intended to be both an attempt at analysis of shoe prices and resell dat
 
 Made using a variety of cross-validated regressor models for prediction, selenium scrapers, and some simple Flaks and Express for the api and app respectively.
 
-Site link: https://shoe-price-app.onrender.com
-
+Site link: https://shoe-price-client-6de70c7f650e.herokuapp.com/
 API link (Daily updated JSON of scraped data and predictions on prices): https://shoe-price.onrender.com/data
 
 Dataset link used to train the model: https://www.kaggle.com/datasets/ajiaron/stockx-sneaker-data
