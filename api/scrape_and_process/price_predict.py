@@ -63,8 +63,7 @@ def get_sorted_drops():
 #Predicting how the price will change in a week, two weeks, and a month and saving data to csv to be used by api
 #These values aren't being used right now since resale data isn't scrapable and predictions on future drops are bad
 def predict_price_over_time(save_to_csv = False, path = "shoe_data.csv"):
-    try:
-        all_shoes = get_sorted_drops()
+    all_shoes = get_sorted_drops()
         after_week, after_2_weeks, after_month = [], [], []
         for idx, row in all_shoes.iterrows():
             row_dict = row.to_dict()
@@ -82,7 +81,5 @@ def predict_price_over_time(save_to_csv = False, path = "shoe_data.csv"):
             all_shoes.to_csv(path)
         else:
             return all_shoes
-    except Exception as e:
-        return
     
 
