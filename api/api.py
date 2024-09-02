@@ -41,3 +41,4 @@ def send_shoe_data():
 
 update_csv()
 run_csv_updater()
+app.listen()
