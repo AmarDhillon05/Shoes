@@ -75,7 +75,8 @@ def predict_price_over_time(save_to_csv = False, path = "shoe_data.csv"):
     all_shoes['price_after_two_weeks'] = after_2_weeks
     all_shoes['price_after_month'] = after_month
 
-     if save_to_csv:
+
+    if save_to_csv:
         if os.path.exists(path):
             os.remove(path)
         all_shoes.to_csv(path)
