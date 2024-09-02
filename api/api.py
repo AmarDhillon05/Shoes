@@ -41,4 +41,4 @@ def send_shoe_data():
 
 update_csv()
 run_csv_updater()
-app.listen()
+app.run(os.environ["PATH"])
