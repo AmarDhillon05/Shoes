@@ -136,7 +136,7 @@ def get_adidas_drops():
     #Parsing after because the page dynamically changed content while parsing, throwing errors
     parser = BeautifulSoup(src, "html.parser")
     product_divs = parser.find_all("div", {"class" : "plc-product-details-info"})
-    product_links = [a['href'] for a in parser.find_all("a") if a.has_attr("class") and "_plc-product-link" in ' '.join(a['class'])]
+    product_links = [root + a['href'] for a in parser.find_all("a") if a.has_attr("class") and "_plc-product-link" in ' '.join(a['class'])]
     
     adidas_data = []
     
