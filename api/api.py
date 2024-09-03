@@ -28,6 +28,10 @@ def run_csv_updater():
 #flask app
 app = Flask(__name__)
 
+@app.route("/", methods = ["GET"])
+def route_for_ping():
+    return "Thanks cron job!"
+
 @app.route("/data", methods = ["GET"])
 def send_shoe_data():
     try:
