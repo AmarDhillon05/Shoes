@@ -120,33 +120,48 @@ def get_new_balance_drops():
 #Getting adidas drops
 def get_adidas_drops():
     adidas_link = "https://www.adidas.com/us/release-dates"
+    root = "https://www.adidas.com"
+
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--disable-dev-shm-usage')  
     chrome_options.add_argument('--headless=new')
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
     chrome_options.add_argument(f'user-agent={user_agent}')
-    driver = webdriver.Chrome(options = chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
 
     driver.get(adidas_link)
-    dates = [i.find_element(By.CSS_SELECTOR, 'strong').get_property('innerHTML') for i in driver.find_elements(By.CSS_SELECTOR, "div._plc-product-date_1xwgu_180")]
-    shoe_names = [i.get_property('innerHTML') for i in driver.find_elements(By.CSS_SELECTOR, 'div._plc-product-name_1xwgu_161')]
-    prices = [i.get_property('innerHTML') for i in driver.find_elements(By.CSS_SELECTOR, 'div.gl-price-item')]
-    links = [i.get_property('href') for i in driver.find_elements(By.CSS_SELECTOR, 'a._plc-product-link_1xwgu_57')]
+    src = driver.page_source
     driver.quit()
-
+    
+    #Parsing after because the page dynamically changed content while parsing, throwing errors
+    parser = BeautifulSoup(src, "html.parser")
+    product_divs = parser.find_all("div", {"class" : "plc-product-details-info"})
+    product_links = [a['href'] for a in parser.find_all("a") if a.has_attr("class") and "_plc-product-link" in ' '.join(a['class'])]
+    
     adidas_data = []
-    for date, shoe_name, price, link in zip(dates, shoe_names, prices, links):
+    
+    def handle(link, div):
         try:
-            price = float(price.replace("$", ""))
-            date = date.split(" ")[1] + " " + date.split(" ")[2]
+            date = div.find("strong").decode_contents(); 
+            price = div.find("div", {"class" : "gl-price-item"}).decode_contents(); 
+            name = [d.decode_contents() for d in div.find_all("div") if '_plc-product-name' in ' '.join(d['class'])][0]
+
+            price = float(price.replace("$", ''))
 
             adidas_data.append({
-                'release_date' : date, 'name' : "Adidas " + shoe_name, 'price' : price, 'link' : link, 
-                'brand' : 'adidas',  'img_link' : get_img_from_google("Adidas " + shoe_name)
+                'release_date' : date, 'name' : "Adidas " + name, 'price' : price, 'link' : link,
+                'brand' : 'adidas', 'img_link' : get_img_from_google("Adidas "  + name)
             })
-        
-        except: #Same assumption that product isn't a shoe
+        except Exception as e:
             pass
+    
+    threads = []
+    for link, div in zip(product_links, product_divs):
+        t = threading.Thread(target = handle, args = (link, div))
+        threads.append(t)
+        t.start()
+
+    for t in threads:
+        t.join()
 
     return adidas_data
-
