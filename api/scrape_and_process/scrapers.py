@@ -26,7 +26,7 @@ def get_nike_drops():
     shoe_links = [e['href'] for e in parser.find_all('a', {'class' : 'card-link d-sm-b'})]
 
     snkrs_data = []
-
+    names = []
 
     def process_link(link):
         full_link = "https://nike.com" + link.replace('/it', '')
@@ -34,6 +34,10 @@ def get_nike_drops():
         parser = BeautifulSoup(req.content, 'html.parser')
         try:
             shoe = parser.find('h1', {'class' : 'headline-5'}).decode_contents()
+            if shoe in names:
+                raise Exception("Duplicate shoe")
+                
+            names.append(shoe)
             colorway = parser.find('h2', {'class' : 'headline-1'}).decode_contents()
             price = parser.find('div', {'class' : 'headline-5'}).decode_contents()
             release_date = parser.find('div', {'class' : 'available-date-component'}).decode_contents()
@@ -69,6 +73,7 @@ def get_nike_drops():
 
 
 #Getting new balance drops
+#UPDATE: Website blocked by bots
 def get_new_balance_drops():
     nb_data = []
 
@@ -139,13 +144,17 @@ def get_adidas_drops():
     product_links = [root + a['href'] for a in parser.find_all("a") if a.has_attr("class") and "_plc-product-link" in ' '.join(a['class'])]
     
     adidas_data = []
+    names = []
     
     def handle(link, div):
         try:
             date = div.find("strong").decode_contents(); 
             price = div.find("div", {"class" : "gl-price-item"}).decode_contents(); 
             name = [d.decode_contents() for d in div.find_all("div") if '_plc-product-name' in ' '.join(d['class'])][0]
+            if name in names:
+                raise Exception("Duplicate Shoe")
 
+            names.append(name)
             price = float(price.replace("$", ''))
 
             adidas_data.append({
