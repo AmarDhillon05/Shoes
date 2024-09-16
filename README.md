@@ -4,7 +4,7 @@ This is intended to be both an attempt at analysis of shoe prices and resell dat
 
 Made using a variety of cross-validated regressor models for prediction, selenium scrapers, and some simple Flaks and Express for the api and app respectively.
 
-Site link: https://shoe-price-client-6de70c7f650e.herokuapp.com/
+Site link: https://shoeapp.adh05.com
 
 API link (Daily updated JSON of scraped data and predictions on prices): http://3.91.241.249/data
 
