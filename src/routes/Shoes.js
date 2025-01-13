@@ -16,7 +16,7 @@ export default function Shoes(){
     const [modalShoeData, setModalShoeData] = useState({})
     
     let shoeData = []
-    const uri = "/api/data'
+    const uri = "/api/data"
 
     useEffect(() => {
 
