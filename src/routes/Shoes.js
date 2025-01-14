@@ -44,7 +44,7 @@ export default function Shoes(){
             //Using the filter from brand 
             if(content.length != 0){
                 document.getElementById("searchBar").value = content
-                setShownShoeData(allShoeData.filter(x => x.name.toLowerCase().includes(content)))
+                setShownShoeData(allShoeData.filter(x => x.name.toLowerCase().includes(content.toLowerCase())))
             }
     
 
