@@ -83,6 +83,7 @@ export default function Shoes(){
                 {shownShoeData.map((shoe, index) => (
                     <div key = {index} onClick={(e) => {
                         document.getElementById('page').style.opacity = '20%'
+                        window.scrollTo(0, 0)
                         setModalShoeData(shoe)
                     }}>
                      <ShoeCard shoe = {shoe}></ShoeCard>
