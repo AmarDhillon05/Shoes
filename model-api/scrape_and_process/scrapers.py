@@ -153,7 +153,6 @@ def get_new_balance_drops():
 
     nb_link = 'https://www.newbalance.com/nb-launches/'
     driver.get(nb_link)
-    print(driver.page_source)
     shoes = driver.find_elements(By.CSS_SELECTOR, 'a.product')
     links = [shoe.get_property('href') for shoe in shoes]
 
