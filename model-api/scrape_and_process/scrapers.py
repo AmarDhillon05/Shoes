@@ -25,55 +25,59 @@ def get_img_from_google(query):
 #Getting data for nike/jordan drops via snkrs
 def get_nike_drops():
     snkrs_link = "https://www.nike.com/launch?s=upcoming"
+    root = 'https://nike.com'
 
-    req = requests.get(snkrs_link, headers = {'User-agent': 'Mozilla/5.0'})
-    parser = BeautifulSoup(req.content, 'html.parser')
-    shoe_links = []
-    for x in [e['href'] for e in parser.find_all('a', {'class' : 'card-link'})]:
-        if x not in shoe_links:
-            shoe_links.append(x)
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--disable-dev-shm-usage')  
+    chrome_options.add_argument('--headless=new')
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
+    chrome_options.add_argument(f'user-agent={user_agent}')
+    driver = webdriver.Chrome(options=chrome_options)
 
-    snkrs_data = []
+    driver.get(snkrs_link)
+    src = driver.page_source
+    driver.quit()
 
+    #Parsing
+    parser = BeautifulSoup(src, 'html.parser')
+    links = [a['href'] for a in parser.find_all("a") if a.has_attr("class") and "product-card-link" in ' '.join(a['class'])]
+    
+    all_shoes = []
 
-    def process_link(link):
-        full_link = "https://nike.com" + link.replace('/it', '')
-        req = requests.get(full_link)
+    def handle(link):
         try:
-            parser = BeautifulSoup(req.content, 'html.parser')
+            driver = webdriver.Chrome(options=chrome_options)
+            shoe_dict = {'link' : link}
+            link = root + link
+            driver.get(link)
+            src = driver.page_source
+            driver.quit()
 
-            shoe = parser.find('h1').decode_contents()
-            colorway = parser.find('h2').decode_contents()
-            price = parser.find('div', {'class' : 'headline-5'}).decode_contents()
-            release_date = parser.find('div', {'class' : 'available-date-component'})
-        
-           
+            parser = BeautifulSoup(src, 'html.parser')
+            shoe_dict['name'] = ' '.join([h.decode_contents() for h in parser.find_all(class_ = 'pb3-sm')])
+            shoe_dict['release_date'] = ' '.join(parser.find(class_ = 'available-date-component').decode_contents().split(' ')[:2])
+            shoe_dict['price'] = float(parser.find_all(class_ = "pb6-sm")[0].decode_contents().replace("$", ""))
+            shoe_dict['img_link'] = get_img_from_google(shoe_dict['name'])
 
-            price = float(price.replace("$", ""))
-            brand = 'Nike'
-            if 'Jordan' in shoe:
-                brand = 'Jordan'
+            shoe_dict['brand'] = 'Nike'
+            if 'jordan' in shoe_dict['name'].lower():
+                shoe_dict['brand'] = 'Jordan'
 
-            snkrs_data.append({
-                'name' : shoe + " " + colorway, 'price' : price, 'release_date' : release_date, 'link' : full_link,
-                'brand' : brand, 'img_link' : get_img_from_google(shoe + " " + colorway)
-            })
+            all_shoes.append(shoe_dict)
         except Exception as e:
-            pass #Not a sneaker page or sumn like this
+            print(e)
 
     threads = []
+    for l in links:
+        t = threading.Thread(target = handle, args = (l,))
+        threads.append(t)
+        t.start()
 
-    for link in shoe_links:
-        if "/launch/t" in link:
-            thread = threading.Thread(target = process_link, args = (link, ))
-            threads.append(thread)
-            thread.start()
-
-    for thread in threads:
-        thread.join()
+    for t in threads:
+        t.join()
 
 
-    return snkrs_data
+    return all_shoes
 
 
 
