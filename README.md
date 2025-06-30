@@ -1,6 +1,9 @@
 NOTE - The current model has been taken offline, since it's going to be revamped to 
+
   1). Take into account the change in hype of shoe reselling, 
+  
   2). Aim to use more powerful models and provide more useful information, and 
+  
   3). Be an all-in-one utility or proof of concept in if using models for this task is still relevant
 
 
