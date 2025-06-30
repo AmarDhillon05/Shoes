@@ -1,3 +1,9 @@
+NOTE - The current model has been taken offline, since it's going to be revamped to 
+  1). Take into account the change in hype of shoe reselling, 
+  2). Aim to use more powerful models and provide more useful information, and 
+  3). Be an all-in-one utility or proof of concept in if using models for this task is still relevant
+
+
 This is a website that scrapes the websites of popular sneaker brands for upcoming drops, and uses a model fitted to past resell data to predict what the shoe will resell for after being sold out.
 
 It was made with the intent of finding trends in shoe data and educating beginner resellers to make their first profitable decisions
