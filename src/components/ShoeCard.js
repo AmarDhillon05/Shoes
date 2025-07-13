@@ -1,17 +1,25 @@
 export default function ShoeCard(shoe){
-    const data = shoe.shoe
-
+    let data = shoe.shoe
+    if(!data){
+        data = shoe
+    }
+  
     //Fitting name
-    let name = "", split = data.name.split(" "), length = 0, max = 20
+    let name = " ", split = data.name.split(" "), length = 0, max = 20
     let i = 0
     while(length < max){
-        if(name.length + split[i].length + 1 <= max){
-            name += split[i] + " "
-            length = name.length
-            i ++
+        try{
+            if(name && name.length + split[i].length + 1 <= max){
+                name += split[i] + " "
+                length = name.length
+                i ++
+            }
+            else{
+                length = max
+            }
         }
-        else{
-            length = max
+        catch(e){
+            break
         }
     }
 
