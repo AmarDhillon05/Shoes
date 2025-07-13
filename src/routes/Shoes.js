@@ -17,12 +17,14 @@ export default function Shoes(){
     
     let shoeData = []
     const uri = "/api/data"
+    //const uri = "http://52.201.252.200:80/data"
 
     useEffect(() => {
 
         //Fetchcing 
         axios.get(uri).then(res => {
-            res = res.data
+            if(res.data){ res = res.data }
+            delete res.Unnamed
             for(let i = 0; i < Object.keys(res.brand).length; i ++){
                 let data = {
                     brand: res.brand[i],
