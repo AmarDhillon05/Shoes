@@ -1,4 +1,4 @@
-
+NOTE - This has been taken down, however could be useful for refernce or model and scraping techniques
 
 This is a website that scrapes the websites of popular sneaker brands for upcoming drops, and uses a model fitted to past resell data to predict what the shoe will resell for after being sold out.
 
